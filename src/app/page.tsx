@@ -1,8 +1,11 @@
+import AppHeader from "@/components/header/app.header";
 
 
 const HomePage = () => {
   return (
-    <div>Hello Word</div>
+    <>
+      <AppHeader />
+    </>
   );
 }
 export default HomePage;
