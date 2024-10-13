@@ -24,7 +24,7 @@ const MainSlider = (props: IProps) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    right: 25,
+                    right: 0,
                     top: "25%",
                     zIndex: 2,
                     minWidth: 30,
@@ -44,7 +44,7 @@ const MainSlider = (props: IProps) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    left: 25,
+                    left: 0,
                     top: "25%",
                     zIndex: 2,
                     minWidth: 30,
