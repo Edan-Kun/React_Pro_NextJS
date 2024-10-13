@@ -6,6 +6,7 @@ import { Box, Button } from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
+import Link from "next/link";
 
 interface IProps {
     data: ITrackTop[]
@@ -23,7 +24,7 @@ const MainSlider = (props: IProps) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    right: 0,
+                    right: 25,
                     top: "25%",
                     zIndex: 2,
                     minWidth: 30,
@@ -43,6 +44,7 @@ const MainSlider = (props: IProps) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
+                    left: 25,
                     top: "25%",
                     zIndex: 2,
                     minWidth: 30,
@@ -70,18 +72,13 @@ const MainSlider = (props: IProps) => {
                 ".track": {
                     padding: "0 10px",
                     textAlign: "center",
+                    marginBottom: "50px",
 
                     "img": {
                         height: 150,
                         width: 150,
                         margin: "0 auto"
                     }
-                },
-                "h3": {
-                    border: "1px solid #ccc",
-                    padding: "20px",
-                    height: "200px",
-
                 }
             }}
         >
@@ -92,9 +89,12 @@ const MainSlider = (props: IProps) => {
                     return (
                         <div className="track" key={track._id}>
                             <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} />
-                            <h4>{track.title}</h4>
+                            <Link href={`/track/${track._id}?audio=${track.trackUrl}`}>
+                                <h4>{track.title}</h4>
+                            </Link>
                             <h5>{track.description}</h5>
                         </div>
+
                     )
                 })}
 
