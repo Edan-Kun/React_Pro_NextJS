@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WaveSurferOptions } from "wavesurfer.js";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import Tooltip from "@mui/material/Tooltip";
 
 import './wave.scss';
 
@@ -104,7 +105,7 @@ const WaveTrack = () => {
             avatar: "http://localhost:8000/images/chill1.png",
             moment: 30,
             user: "username 2",
-            content: "just a comment3"
+            content: "just a comment2"
         },
         {
             id: 3,
@@ -212,17 +213,34 @@ const WaveTrack = () => {
                         >
                             {arrComments.map((item) => {
                                 return (
-                                    <img
-                                        key={item.id}
-                                        style={{
-                                            height: 20, width: 20,
-                                            position: "absolute",
-                                            top: 71,
-                                            zIndex: 20,
-                                            left: calLeft(item.moment)
+                                    <Tooltip
+                                        PopperProps={{
+                                            sx: {
+                                                '& .MuiTooltip-tooltip': {
+                                                    backgroundColor: 'rgba(128, 128, 128, 0)',
+                                                    color: 'orange',
+                                                    fontWeight: 400,
+                                                },
+                                            },
                                         }}
-                                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/chill1.png`}
-                                    />
+                                        title={item.content}
+                                    >
+                                        <img
+                                            onPointerMove={(e) => {
+                                                const hover = hoverRef.current!;
+                                                hover.style.width = calLeft(item.moment + 2)
+                                            }}
+                                            key={item.id}
+                                            style={{
+                                                height: 20, width: 20,
+                                                position: "absolute",
+                                                top: 71,
+                                                zIndex: 20,
+                                                left: calLeft(item.moment)
+                                            }}
+                                            src={`http://localhost:8000/images/chill1.png`}
+                                        />
+                                    </Tooltip>
                                 )
                             })}
                         </div>
