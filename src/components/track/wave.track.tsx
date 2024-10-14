@@ -3,6 +3,9 @@ import { useWavesurfer } from "@/utils/customHook";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WaveSurferOptions } from "wavesurfer.js";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+
 import './wave.scss';
 
 const WaveTrack = () => {
@@ -42,8 +45,8 @@ const WaveTrack = () => {
         return {
             waveColor: gradient,
             progressColor: progressGradient,
-            height: 150,
-            barWidth: 2,
+            height: 100,
+            barWidth: 3,
             url: `/api?audio=${fileName}`,
         }
     }, [])
@@ -52,7 +55,7 @@ const WaveTrack = () => {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!wavesurfer) return
+        if (!wavesurfer) return;
         setIsPlaying(false);
         const hover = hoverRef.current!;
         const waveform = containerRef.current!;
@@ -63,7 +66,10 @@ const WaveTrack = () => {
             wavesurfer.on('play', () => setIsPlaying(true)),
             wavesurfer.on('pause', () => setIsPlaying(false)),
             wavesurfer.on('decode', (duration) => setDuration(formatTime(duration))),
-            wavesurfer.on('timeupdate', (time) => setTime(formatTime(time)))
+            wavesurfer.on('timeupdate', (time) => setTime(formatTime(time))),
+            wavesurfer.once('interaction', () => {
+                wavesurfer.play()
+            })
         ]
 
         return () => {
@@ -85,22 +91,111 @@ const WaveTrack = () => {
         return `${minutes}:${paddedSeconds}`
     }
 
-
     return (
-        <div style={{ marginTop: 100 }}>
-            <div ref={containerRef} className="wave-form-container">
-                Bản Nhạc:
-                <div className="time">{time}</div>
-                <div className="duration">{duration}</div>
-                <div ref={hoverRef} className="hover-wave"></div>
-            </div>
-            <button
-                onClick={() => onPlayClick()}
+        <div style={{ marginTop: 20 }}>
+            <div
+                style={{
+                    display: "flex",
+                    gap: 15,
+                    padding: 20,
+                    height: 400,
+                    background: "linear-gradient(135deg, rgb(106, 112, 67) 0%, rgb(11, 15, 20) 100%)"
+                }}
             >
-                {isPlaying === true ? 'Pause' : 'Play'}
-            </button>
-        </div>
+                <div
+                    className="left"
+                    style={{
+                        width: "75%",
+                        height: "calc(100% - 10px)",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between"
+                    }}
 
+                >
+                    <div className="info" style={{ display: "flex" }}>
+                        <div>
+                            <div
+                                onClick={() => onPlayClick()}
+                                style={{
+                                    borderRadius: "50%",
+                                    background: "#f50",
+                                    height: "50px",
+                                    width: "50px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                {isPlaying === true ?
+                                    <PauseIcon
+                                        sx={{ fontSize: 30, color: "white" }}
+                                    />
+                                    :
+                                    <PlayArrowIcon
+                                        sx={{ fontSize: 30, color: "white" }}
+                                    />
+                                }
+                            </div>
+                        </div>
+                        <div style={{ marginLeft: 20 }}>
+                            <div style={{
+                                padding: "0 5px",
+                                background: "#333",
+                                fontSize: 30,
+                                width: "fit-content",
+                                color: "white"
+                            }}>
+                                Hỏi Dân IT's song
+                            </div>
+                            <div style={{
+                                padding: "0 5px",
+                                marginTop: 10,
+                                background: "#333",
+                                fontSize: 20,
+                                width: "fit-content",
+                                color: "white"
+                            }}
+                            >
+                                Eric
+                            </div>
+                        </div>
+                    </div>
+                    <div ref={containerRef} className="wave-form-container">
+                        <div className="time" >{time}</div>
+                        <div className="duration" >{duration}</div>
+                        <div ref={hoverRef} className="hover-wave"></div>
+                        <div className="overlay"
+                            style={{
+                                position: "absolute",
+                                height: "30px",
+                                width: "100%",
+                                bottom: "0",
+                                // background: "#ccc"
+                                backdropFilter: "brightness(0.5)"
+                            }}
+                        ></div>
+                    </div>
+                </div>
+                <div className="right"
+                    style={{
+                        width: "25%",
+                        padding: 15,
+                        display: "flex",
+                        alignItems: "center"
+                    }}
+                >
+                    <div style={{
+                        background: "#ccc",
+                        width: 250,
+                        height: 250
+                    }}>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     )
 }
 
