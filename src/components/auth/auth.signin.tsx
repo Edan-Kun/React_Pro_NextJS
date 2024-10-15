@@ -8,10 +8,15 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-
 import { useState } from "react";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const AuthSignIn = (props: any) => {
+    const router = useRouter();
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
@@ -23,8 +28,11 @@ const AuthSignIn = (props: any) => {
     const [errorUsername, setErrorUsername] = useState<string>("");
     const [errorPassword, setErrorPassword] = useState<string>("");
 
+    const [openMessage, setOpenMessage] = useState<boolean>(false);
+    const [resMessage, setResMessage] = useState<string>("");
 
-    const handleSubmit = () => {
+
+    const handleSubmit = async () => {
         setIsErrorUsername(false);
         setIsErrorPassword(false);
         setErrorUsername("");
@@ -40,7 +48,25 @@ const AuthSignIn = (props: any) => {
             setErrorPassword("Password is not empty.")
             return;
         }
-        console.log(">>> check username: ", username, ' pass: ', password)
+        const res = await signIn("credentials", {
+            username: username,
+            password: password,
+            redirect: false
+        })
+        if (!res?.error) {
+            //redirect to home
+            router.push("/")
+        } else {
+            setOpenMessage(true);
+            setResMessage(res.error)
+        }
+        console.log(">>> check res: ", res)
+    }
+
+    const handleEnterSubmit = (event: string) => {
+        if (event === "Enter") {
+            handleSubmit();
+        }
     }
 
     return (
@@ -72,6 +98,9 @@ const AuthSignIn = (props: any) => {
                     }}
                 >
                     <div style={{ margin: "20px" }}>
+                        <Link href={"/"}>
+                            <ArrowBackIcon />
+                        </Link>
                         <Box sx={{
                             display: "flex",
                             justifyContent: "center",
@@ -103,6 +132,7 @@ const AuthSignIn = (props: any) => {
                         />
                         <TextField
                             onChange={(event) => setPassword(event.target.value)}
+                            onKeyDown={(event) => handleEnterSubmit(event.key)}
                             variant="outlined"
                             margin="normal"
                             required
@@ -166,6 +196,17 @@ const AuthSignIn = (props: any) => {
                     </div>
                 </Grid>
             </Grid>
+            <Snackbar
+                open={openMessage}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={() => setOpenMessage(false)}
+                    severity="error" sx={{ width: '100%' }}>
+                    {resMessage}
+                </Alert>
+            </Snackbar>
+
 
         </Box>
 
