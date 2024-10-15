@@ -63,7 +63,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function AppHeader() {
     const { data: session } = useSession();
-    console.log("Check session: ", session);
 
     const router = useRouter();
 

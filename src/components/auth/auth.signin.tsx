@@ -60,7 +60,6 @@ const AuthSignIn = (props: any) => {
             setOpenMessage(true);
             setResMessage(res.error)
         }
-        console.log(">>> check res: ", res)
     }
 
     const handleEnterSubmit = (event: string) => {
