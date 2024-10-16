@@ -74,10 +74,10 @@ const StepOne = (props: IProps) => {
                             })
                         }
                     })
-                props.setTrackUpload({
-                    ...trackUpload,
+                props.setTrackUpload((prevState: any) => ({
+                    ...prevState,
                     uploadedTrackName: res.data.data.fileName
-                })
+                }))
             } catch (error) {
                 //@ts-ignore
                 alert(error?.response?.data?.message)
