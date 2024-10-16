@@ -10,6 +10,8 @@ import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgres
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -55,10 +57,45 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-function InputFileUpload() {
+function InputFileUpload(props: any) {
+    const { setInfo, info } = props;
+    const { data: session } = useSession();
+
+    const handleUpload = async (image: any) => {
+        const formData = new FormData()
+        formData.append('fileUpload', image);
+        try {
+            const res = await axios.post("http://localhost:8000/api/v1/files/upload", formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session?.access_token}`,
+                        "target_type": 'images',
+                    },
+                })
+            setInfo({
+                ...info,
+                imgUrl: res.data.data.fileName
+            })
+        } catch (error) {
+            //@ts-ignore
+            alert(error?.response?.data?.message)
+        }
+    }
+
     return (
         <Button
-            component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+            onChange={(event) => {
+                const res = event.target as HTMLInputElement;
+                if (res.files) {
+                    handleUpload(res.files[0])
+                }
+            }}
+            component="label"
+            variant="contained"
+            startIcon={
+                <CloudUploadIcon />
+            }
+        >
             Upload file
             <VisuallyHiddenInput type="file" />
         </Button>
@@ -109,6 +146,10 @@ const StepTwo = (props: IProps) => {
         }
     ];
 
+    const handleSubmitForm = () => {
+        console.log(">>> check info: ", info)
+    }
+
     console.log(">>> check info: ", info)
 
     return (
@@ -134,21 +175,29 @@ const StepTwo = (props: IProps) => {
                 >
                     <div style={{ height: 250, width: 250, background: "#ccc" }}>
                         <div>
-
+                            {info.imgUrl &&
+                                <img
+                                    height={250}
+                                    width={250}
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${info.imgUrl}`} />
+                            }
                         </div>
 
                     </div>
                     <div >
-                        <InputFileUpload />
+                        <InputFileUpload
+                            setInfo={setInfo}
+                            info={info}
+                        />
                     </div>
 
                 </Grid>
                 <Grid item xs={6} md={8}>
                     <TextField
                         value={info?.title}
-                        onChange={(e) => setInfo({
+                        onChange={(event) => setInfo({
                             ...info,
-                            title: e.target.value
+                            title: event.target.value
                         })}
                         label="Title"
                         variant="standard"
@@ -156,9 +205,9 @@ const StepTwo = (props: IProps) => {
                     />
                     <TextField
                         value={info?.description}
-                        onChange={(e) => setInfo({
+                        onChange={(event) => setInfo({
                             ...info,
-                            description: e.target.value
+                            description: event.target.value
                         })}
                         label="Description"
                         variant="standard"
@@ -166,9 +215,9 @@ const StepTwo = (props: IProps) => {
                     />
                     <TextField
                         value={info?.category}
-                        onChange={(e) => setInfo({
+                        onChange={(event) => setInfo({
                             ...info,
-                            category: e.target.value
+                            category: event.target.value
                         })}
                         sx={{
                             mt: 3
@@ -189,7 +238,9 @@ const StepTwo = (props: IProps) => {
                         variant="outlined"
                         sx={{
                             mt: 5
-                        }}>Save</Button>
+                        }}
+                        onClick={() => handleSubmitForm()}
+                    >Save</Button>
                 </Grid>
             </Grid>
 
