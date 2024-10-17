@@ -26,7 +26,7 @@ const HomePage = async () => {
   })
 
   return (
-    <Container maxWidth="xl">
+    <Container>
       <MainSlider
         title="Top Remix"
         data={remix?.data ?? []}

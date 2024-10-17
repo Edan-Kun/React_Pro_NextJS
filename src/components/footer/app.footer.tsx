@@ -11,38 +11,52 @@ const AppFooter = () => {
     if (!hasMounted) return (<></>)
 
     return (
-        <AppBar
-            position="fixed"
-            color="primary"
-            sx={{ top: 'auto', bottom: 0, background: "#f2f2f2" }}
-        >
-            <Container
-                maxWidth="xl"
-                sx={{ display: "flex", gap: 10 }}
+        <div style={{ marginTop: 30 }}>
+            <AppBar
+                position="fixed"
+                color="primary"
+                sx={{ top: 'auto', bottom: 0, background: "#f2f2f2" }}
             >
-                <AudioPlayer
-                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/Once_Upon_A_Time.mp3`}
-                    volume={0.5}
-                    style={{
-                        boxShadow: "unset",
-                        background: "#f2f2f2"
+                <Container
+                    sx={{
+                        display: "flex",
+                        gap: 10,
+                        '.rhap_main': {
+                            gap: "30px"
+                        },
+                        '.rhap_additional-controls': {
+                            justifyContent: "center"
+                        },
+                        '.rhap_main-controls': {
+                            marginRight: "20px"
+                        }
                     }}
-                />
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "start",
-                    justifyContent: "center",
-                    minWidth: 130,
-                    borderLeft: "3px solid #ccc",
-                    paddingLeft: 30
-                }}>
-                    <div style={{ color: "#ccc" }}>Edan</div>
-                    <div style={{ color: "black" }}>Who am I ?</div>
-                </div>
-            </Container>
+                >
+                    <AudioPlayer
+                        layout="horizontal-reverse"
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/Once_Upon_A_Time.mp3`}
+                        volume={0.5}
+                        style={{
+                            boxShadow: "unset",
+                            background: "#f2f2f2"
+                        }}
+                    />
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "start",
+                        justifyContent: "center",
+                        minWidth: 130,
+                        borderLeft: "3px solid #ccc",
+                        paddingLeft: 30
+                    }}>
+                        <div style={{ color: "#ccc" }}>Edan</div>
+                        <div style={{ color: "black" }}>Who am I ?</div>
+                    </div>
+                </Container>
 
-        </AppBar>
+            </AppBar>
+        </div>
     )
 }
 export default AppFooter;

@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 
 const UploadPage = () => {
     return (
-        <Container maxWidth="xl">
+        <Container>
             <UploadTabs />
         </Container>
     )

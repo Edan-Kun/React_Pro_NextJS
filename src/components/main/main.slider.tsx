@@ -24,7 +24,7 @@ const MainSlider = (props: IProps) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    right: 0,
+                    right: 25,
                     top: "25%",
                     zIndex: 2,
                     minWidth: 30,
@@ -44,7 +44,6 @@ const MainSlider = (props: IProps) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    left: 0,
                     top: "25%",
                     zIndex: 2,
                     minWidth: 30,
@@ -71,13 +70,10 @@ const MainSlider = (props: IProps) => {
                 margin: "0 50px",
                 ".track": {
                     padding: "0 10px",
-                    textAlign: "center",
-                    marginBottom: "50px",
 
                     "img": {
                         height: 150,
                         width: 150,
-                        margin: "0 auto"
                     }
                 }
             }}

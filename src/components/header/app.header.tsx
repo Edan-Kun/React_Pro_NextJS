@@ -130,7 +130,7 @@ export default function AppHeader() {
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
             <MenuItem>
-                <Link href={"/profile"} style={{ color: "unset", textDecoration: "unset" }}>Profile</Link>
+                <Link href={`/profile/${session?.user._id}`} style={{ color: "unset", textDecoration: "unset" }}>Profile</Link>
             </MenuItem>
             <MenuItem>
                 <Link href={""} onClick={() => signOut()} style={{ color: "unset", textDecoration: "unset" }}>Logout</Link>
@@ -202,7 +202,7 @@ export default function AppHeader() {
                     background: "#4c5c6c"
                 }}
             >
-                <Container maxWidth="xl">
+                <Container>
                     <Toolbar>
                         <Typography
                             variant="h6"
