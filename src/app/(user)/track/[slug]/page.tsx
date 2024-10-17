@@ -6,6 +6,16 @@ const DetailTrackPage = async ({ params }: { params: { slug: string } }) => {
     const res = await sendRequest<IBackendRes<ITrackTop>>({
         url: `http://localhost:8000/api/v1/tracks/${params.slug}`,
         method: "GET",
+    });
+    const comment = await sendRequest<IBackendRes<IModelPaginate<ITrackComment>>>({
+        url: `http://localhost:8000/api/v1/tracks/comments`,
+        method: "POST",
+        queryParams: {
+            current: 1,
+            pageSize: 10,
+            trackId: params.slug,
+            sort: "-createdAt"
+        }
     })
 
     return (
@@ -13,6 +23,7 @@ const DetailTrackPage = async ({ params }: { params: { slug: string } }) => {
             <div>
                 <WaveTrack
                     track={res?.data ?? null}
+                    comments={comment?.data?.result ?? []}
                 />
             </div>
         </Container>

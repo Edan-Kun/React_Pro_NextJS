@@ -13,10 +13,11 @@ import './wave.scss';
 
 interface IProps {
     track: ITrackTop | null;
+    comments: ITrackComment[];
 }
 
 const WaveTrack = (props: IProps) => {
-    const { track } = props;
+    const { track, comments } = props;
     const searchParams = useSearchParams()
     const fileName = searchParams.get('audio');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -239,7 +240,7 @@ const WaveTrack = (props: IProps) => {
                             className="comments"
                             style={{ position: "relative" }}
                         >
-                            {arrComments.map((item) => {
+                            {comments?.map((item) => {
                                 return (
                                     <Tooltip
                                         PopperProps={{
@@ -253,14 +254,14 @@ const WaveTrack = (props: IProps) => {
                                         }}
                                         title={item.content}
                                         arrow
-                                        key={item.id}
+                                        key={item._id}
                                     >
                                         <img
                                             onPointerMove={(event) => {
                                                 const hover = hoverRef.current!;
                                                 hover.style.width = calLeft(item.moment + 2)
                                             }}
-                                            key={item.id}
+                                            key={item._id}
                                             style={{
                                                 height: 20, width: 20,
                                                 position: "absolute",
