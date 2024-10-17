@@ -1,12 +1,12 @@
 'use client'
 import { useDropzone, FileWithPath } from "react-dropzone";
-import './theme.scss';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useCallback } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import './theme.scss';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -29,9 +29,7 @@ const InputFileUpload = () => {
             startIcon={<CloudUploadIcon />}
         >
             Upload files
-            <VisuallyHiddenInput
-                type="file"
-            />
+            <VisuallyHiddenInput type="file" />
         </Button>
     );
 }
@@ -43,9 +41,8 @@ interface IProps {
 }
 
 const StepOne = (props: IProps) => {
-    const { data: session } = useSession();
-
     const { setValue, trackUpload } = props;
+    const { data: session } = useSession();
 
     const onDrop = useCallback(async (acceptedFiles: FileWithPath[]) => {
         if (acceptedFiles && acceptedFiles[0]) {

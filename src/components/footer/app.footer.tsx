@@ -1,27 +1,39 @@
 'use client'
+import { useTrackContext } from '@/library/track.wrapper';
 import { useHasMounted } from "@/utils/customHook";
 import { AppBar, Container } from "@mui/material";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { useTrackContext } from '@/library/track.wrapper';
+import { useRef, useEffect } from 'react';
 
 
 const AppFooter = () => {
     const hasMounted = useHasMounted();
-
-    if (!hasMounted) return (<></>)
-
+    const playerRef = useRef(null);
     const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
-    console.log(">>> check currentTrack: ", currentTrack)
+    useEffect(() => {
+        if (currentTrack?.isPlaying === false) {
+            //@ts-ignore
+            playerRef?.current?.audio?.current?.pause();
+        }
+        if (currentTrack?.isPlaying === true) {
+            //@ts-ignore
+            playerRef?.current?.audio?.current?.play();
+        }
+    }, [currentTrack])
 
+    if (!hasMounted) return (<></>)
 
     return (
         <div style={{ marginTop: 30 }}>
             <AppBar
                 position="fixed"
                 color="primary"
-                sx={{ top: 'auto', bottom: 0, background: "#f2f2f2" }}
+                sx={{
+                    top: 'auto', bottom: 0,
+                    background: "#f2f2f2"
+                }}
             >
                 <Container
                     sx={{
@@ -39,12 +51,19 @@ const AppFooter = () => {
                     }}
                 >
                     <AudioPlayer
-                        layout="horizontal-reverse"
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/Once_Upon_A_Time.mp3`}
+                        ref={playerRef}
+                        layout='horizontal-reverse'
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/${currentTrack.trackUrl}`}
                         volume={0.5}
                         style={{
                             boxShadow: "unset",
                             background: "#f2f2f2"
+                        }}
+                        onPlay={() => {
+                            setCurrentTrack({ ...currentTrack, isPlaying: true })
+                        }}
+                        onPause={() => {
+                            setCurrentTrack({ ...currentTrack, isPlaying: false })
                         }}
                     />
                     <div style={{
@@ -56,8 +75,8 @@ const AppFooter = () => {
                         borderLeft: "3px solid #ccc",
                         paddingLeft: 30
                     }}>
-                        <div style={{ color: "#ccc" }}>Edan</div>
-                        <div style={{ color: "black" }}>Who am I ?</div>
+                        <div style={{ color: "#ccc" }}>{currentTrack.description}</div>
+                        <div style={{ color: "black" }}>{currentTrack.title}</div>
                     </div>
                 </Container>
 

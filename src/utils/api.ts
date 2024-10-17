@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-export const sendRequest = async <T>(props: IRequest) => {
+export const sendRequest = async <T>(props: IRequest) => { //type
     let {
         url,
         method,
@@ -26,7 +26,7 @@ export const sendRequest = async <T>(props: IRequest) => {
 
     return fetch(url, options).then(res => {
         if (res.ok) {
-            return res.json() as T;
+            return res.json() as T; //generic
         } else {
             return res.json().then(function (json) {
                 // to be able to access error status when you catch the error 

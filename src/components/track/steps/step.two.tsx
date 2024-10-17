@@ -36,7 +36,7 @@ interface IProps {
         percent: number;
         uploadedTrackName: string;
     },
-    setValue: (v: number) => void;
+    setValue: (value: number) => void;
 }
 
 function LinearWithValueLabel(props: IProps) {
@@ -113,7 +113,6 @@ interface INewTrack {
     imgUrl: string;
     category: string;
 }
-
 
 const StepTwo = (props: IProps) => {
     const { data: session } = useSession();
