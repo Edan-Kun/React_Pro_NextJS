@@ -3,12 +3,18 @@ import { useHasMounted } from "@/utils/customHook";
 import { AppBar, Container } from "@mui/material";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+import { useTrackContext } from '@/library/track.wrapper';
 
 
 const AppFooter = () => {
     const hasMounted = useHasMounted();
 
     if (!hasMounted) return (<></>)
+
+    const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
+
+    console.log(">>> check currentTrack: ", currentTrack)
+
 
     return (
         <div style={{ marginTop: 30 }}>

@@ -1,6 +1,7 @@
 import ThemeRegistry from '@/components/theme-registry/theme.registry';
 import NextAuthWrapper from '@/library/next.auth.wrapper';
 import { ToastProvider } from '@/utils/toast';
+import { TrackContextProvider } from '@/library/track.wrapper';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -9,7 +10,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 <ThemeRegistry>
                     <NextAuthWrapper>
                         <ToastProvider>
-                            {children}
+                            <TrackContextProvider>
+                                {children}
+                            </TrackContextProvider>
                         </ToastProvider>
                     </NextAuthWrapper>
                 </ThemeRegistry>
